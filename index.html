@@ -1,532 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Letter From My Heart</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Satisfy&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Letter</title>
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a0a0a 100%);
-            overflow-x: hidden;
-            font-family: 'Dancing Script', cursive;
-        }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
+    }
 
-        .heart-bg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            opacity: 0.05;
-            z-index: 0;
-            animation: heartPulse 1.5s ease-in-out infinite;
-        }
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
 
-        @keyframes heartPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-        }
+    .container {
+      position: relative;
+      z-index: 5;
+    }
 
-        .envelope {
-            position: relative;
-            z-index: 10;
-            max-width: 700px;
-            margin: 50px auto;
-            padding: 40px;
-            background: linear-gradient(145deg, #fff9f0 0%, #fff5e6 100%);
-            border-radius: 10px;
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.4),
-                inset 0 0 100px rgba(255,200,200,0.1);
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
+    .container {
+      text-align: center;
+    }
 
-        .envelope:hover {
-            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg);
-        }
+    /* Envelope */
+    .envelope {
+      width: 300px;
+      height: 200px;
+      background: #f5f5f5;
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
 
-        .wax-seal {
-            position: absolute;
-            top: -30px;
-            right: 40px;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle at 30% 30%, #c41e3a, #8b0000);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #ffd700;
-            box-shadow: 
-                0 5px 20px rgba(0,0,0,0.4),
-                inset 0 -5px 15px rgba(0,0,0,0.3),
-                inset 0 5px 15px rgba(255,255,255,0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .envelope::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #fff, #ddd);
+      z-index: 1;
+    }
 
-        .wax-seal:hover {
-            transform: scale(1.1) rotate(10deg);
-            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.5);
-        }
+    /* Envelope flap */
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 150px solid transparent;
+      border-right: 150px solid transparent;
+      border-top: 100px solid #e0e0e0;
+      transform-origin: top;
+      transition: 0.8s ease;
+      z-index: 5;
+    }
 
-        .letter-content {
-            position: relative;
-            color: #4a3728;
-            line-height: 2.2;
-            font-size: 1.4rem;
-        }
+    /* Letter */
+    .letter {
+      position: absolute;
+      bottom: -100%;
+      left: 10px;
+      width: 280px;
+      height: 180px;
+      background: white;
+      border-radius: 5px;
+      padding: 15px;
+      box-sizing: border-box;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: 1s ease;
+      z-index: 2;
+    }
 
-        .date {
-            text-align: right;
-            font-style: italic;
-            margin-bottom: 30px;
-            opacity: 0;
-            animation: fadeSlideIn 1s ease forwards;
-        }
+    .letter h2 {
+      margin: 5px 0;
+      color: #e91e63;
+    }
 
-        .greeting {
-            font-size: 2rem;
-            color: #c41e3a;
-            margin-bottom: 20px;
-            font-family: 'Satisfy', cursive;
-        }
+    .letter p {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.5;
+    }
 
-        .paragraph {
-            margin-bottom: 25px;
-            opacity: 0;
-        }
+    /* Open State */
+    .open .flap {
+      transform: rotateX(180deg);
+    }
 
-        .secret-word {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .open .letter {
+      bottom: 10px;
+    }
 
-        .secret-word:hover {
-            color: #c41e3a;
-            text-shadow: 0 0 20px rgba(196, 30, 58, 0.5);
-        }
+    /* Button */
+    .play-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 30px;
+      background: #e91e63;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
 
-        .secret-word::after {
-            content: attr(data-secret);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: linear-gradient(135deg, #c41e3a, #ff6b6b);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(196, 30, 58, 0.4);
-        }
+    .play-btn:hover {
+      background: #d81b60;
+      transform: scale(1.05);
+    }
+      .tap-text {
+      position: absolute;
+      bottom: 15px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      z-index: 10;
+      pointer-events: none;
+      font-weight: 500;
+    }
 
-        .secret-word:hover::after {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .signature {
-            text-align: right;
-            font-size: 1.8rem;
-            margin-top: 40px;
-            font-family: 'Satisfy', cursive;
-            color: #c41e3a;
-        }
-
-        .kiss-btn {
-            display: block;
-            margin: 30px auto 0;
-            padding: 15px 40px;
-            background: linear-gradient(135deg, #ff6b6b, #c41e3a);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.3rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.4);
-        }
-
-        .kiss-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(196, 30, 58, 0.6);
-        }
-
-        .floating-heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1000;
-            animation: floatUp 4s ease-out forwards;
-        }
-
-        @keyframes floatUp {
-            0% {
-                opacity: 1;
-                transform: translateY(0) rotate(0deg) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100vh) rotate(720deg) scale(0);
-            }
-        }
-
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cursor-heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-        }
-
-        .ambient-glow {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(196, 30, 58, 0.15) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 1;
-            transition: all 0.3s ease;
-        }
-
-        .typewriter {
-            overflow: hidden;
-            border-right: 2px solid #c41e3a;
-            animation: blink 0.7s infinite;
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-
-        .heart-trail {
-            position: fixed;
-            pointer-events: none;
-            z-index: 999;
-            font-size: 1rem;
-            animation: trailFade 1s ease-out forwards;
-        }
-
-        @keyframes trailFade {
-            0% { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0); }
-        }
-
-        .music-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(196, 30, 58, 0.8);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .music-toggle:hover {
-            transform: scale(1.1);
-            background: #c41e3a;
-        }
-
-        .petals-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
-            overflow: hidden;
-        }
-
-        .petal {
-            position: absolute;
-            top: -50px;
-            animation: fallPetal linear infinite;
-        }
-
-        @keyframes fallPetal {
-            0% {
-                transform: translateY(-50px) rotate(0deg) translateX(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg) translateX(100px);
-                opacity: 0.3;
-            }
-        }
-
-        .ink-splash {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: rgba(196, 30, 58, 0.1);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-    </style>
+    .open .tap-text {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <!-- Background Heart -->
-    <svg class="heart-bg" viewBox="0 0 100 100">
-        <path fill="#c41e3a" d="M50 88.9L45.5 84.8C22 63.7 6 49.4 6 31.8C6 17.5 17.5 6 31.8 6C39.9 6 47.7 9.8 53 15.8C58.3 9.8 66.1 6 74.2 6C88.5 6 100 17.5 100 31.8C100 49.4 84 63.7 60.5 84.8L50 88.9Z" transform="translate(-3, 0) scale(1)"/>
-    </svg>
+<canvas id="particles"></canvas>
 
-    <!-- Ambient Glow -->
-    <div class="ambient-glow" id="ambientGlow"></div>
+<div class="container">
 
-    <!-- Falling Petals -->
-    <div class="petals-container" id="petalsContainer"></div>
+  <div class="envelope" id="envelope">
+    <div class="flap"></div>
 
-    <!-- Main Envelope/Letter -->
-    <div class="envelope" id="envelope">
-        <div class="wax-seal" id="waxSeal" title="Click me!">💝</div>
-        
-        <div class="letter-content">
-            <p class="date" id="date"></p>
-            
-            <p class="greeting" id="greeting"></p>
-            
-            <p class="paragraph" id="p1">
-                From the moment our <span class="secret-word" data-secret="You're my everything">paths crossed</span>, 
-                my world transformed into something <span class="secret-word" data-secret="Like magic ✨">extraordinary</span>. 
-                Every <span class="secret-word" data-secret="I count them all">heartbeat</span> now whispers your name, 
-                and every <span class="secret-word" data-secret="I dream of you">star</span> in the night sky 
-                reminds me of the sparkle in your eyes.
-            </p>
-            
-            <p class="paragraph" id="p2">
-                You are the <span class="secret-word" data-secret="My morning sunshine ☀️">first thought</span> 
-                when I wake, and the <span class="secret-word" data-secret="Sweet dreams of us 🌙">last prayer</span> 
-                before I sleep. Your <span class="secret-word" data-secret="It's my favorite sound">laughter</span> 
-                is the melody that my soul dances to, and your 
-                <span class="secret-word" data-secret="They heal everything">touch</span> 
-                feels like coming home after a lifetime of wandering.
-            </p>
-            
-            <p class="paragraph" id="p3">
-                I don't just <span class="secret-word" data-secret="With all my heart 💕">love</span> you — 
-                I <span class="secret-word" data-secret="In this life and the next">choose</span> you. 
-                Today, tomorrow, and for all the <span class="secret-word" data-secret="∞ Forever ∞">tomorrows</span> 
-                that follow. You are my <span class="secret-word" data-secret="My happy place 🏡">home</span>, 
-                my <span class="secret-word" data-secret="My safe harbor ⚓">peace</span>, 
-                and my greatest <span class="secret-word" data-secret="My treasure 💎">adventure</span>.
-            </p>
-            
-            <div class="signature" id="signature"></div>
-        </div>
-        
-        <button class="kiss-btn" id="kissBtn">💋 Seal With A Kiss 💋</button>
+        <div class="tap-text">Tap to Open ✨</div>
+
+    <div class="letter">
+      <h2>To My Love ❤</h2>
+      <h1 style="margin-top:25px;font-size:20px;color:#e91e63;">🎉 Happy Birthday 🎂</h1>
     </div>
+  </div>
 
-    <script>
-        // Typewriter Effect
-        function typeWriter(element, text, speed, callback) {
-            let i = 0;
-            element.innerHTML = '';
-            element.style.opacity = '1';
-            
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    if (callback) callback();
-                }
-            }
-            type();
-        }
+  <button class="play-btn" onclick="playVoice()">▶ Play Voice</button>
 
-        // Initialize Letter Animation
-        function initLetter() {
-            const today = new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            setTimeout(() => {
-                typeWriter(document.getElementById('date'), today, 50, () => {
-                    setTimeout(() => {
-                        typeWriter(document.getElementById('greeting'), 'My Dearest Love,', 80, () => {
-                            animateParagraphs();
-                        });
-                    }, 300);
-                });
-            }, 500);
-        }
+  <!-- Audio File (Replace voice.mp3 with your own file) -->
+  <audio id="voice">
+    <source src="voice.mp3" type="audio/mpeg">
+  </audio>
 
-        function animateParagraphs() {
-            const paragraphs = document.querySelectorAll('.paragraph');
-            paragraphs.forEach((p, index) => {
-                setTimeout(() => {
-                    p.style.animation = `fadeSlideIn 1s ease forwards`;
-                }, index * 800);
-            });
-            
-            setTimeout(() => {
-                typeWriter(document.getElementById('signature'), 'Forever & Always Yours ❤️', 60);
-            }, paragraphs.length * 800 + 500);
-        }
+</div>
 
-        // Floating Hearts on Kiss Button
-        document.getElementById('kissBtn').addEventListener('click', function(e) {
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    createFloatingHeart(e.clientX + (Math.random() - 0.5) * 100, e.clientY);
-                }, i * 50);
-            }
-            
-            // Burst effect
-            this.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 200);
-        });
+<script>
+  const envelope = document.getElementById("envelope");
 
-        function createFloatingHeart(x, y) {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.innerHTML = ['❤️', '💕', '💖', '💗', '💓', '💘', '💝'][Math.floor(Math.random() * 7)];
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
-            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            document.body.appendChild(heart);
-            
-            setTimeout(() => heart.remove(), 4000);
-        }
+  envelope.addEventListener("click", () => {
+    envelope.classList.toggle("open");
+  });
 
-        // Wax Seal Click Effect
-        document.getElementById('waxSeal').addEventListener('click', function() {
-            this.style.animation = 'none';
-            this.offsetHeight; // Trigger reflow
-            this.style.transform = 'scale(1.3) rotate(360deg)';
-            
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    const rect = this.getBoundingClientRect();
-                    createFloatingHeart(rect.left + rect.width/2, rect.top + rect.height/2);
-                }, i * 100);
-            }
-            
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 500);
-        });
+  function playVoice() {
+    const audio = document.getElementById("voice");
+    audio.play();
+  }
+  
+  /* Particle Background */
+  const canvas = document.getElementById("particles");
+  const ctx = canvas.getContext("2d");
 
-        // Ambient Glow follows mouse
-        document.addEventListener('mousemove', (e) => {
-            const glow = document.getElementById('ambientGlow');
-            glow.style.left = e.clientX - 150 + 'px';
-            glow.style.top = e.clientY - 150 + 'px';
-            
-            // Heart trail
-            if (Math.random() > 0.92) {
-                const trail = document.createElement('div');
-                trail.className = 'heart-trail';
-                trail.innerHTML = '💗';
-                trail.style.left = e.clientX + 'px';
-                trail.style.top = e.clientY + 'px';
-                document.body.appendChild(trail);
-                setTimeout(() => trail.remove(), 1000);
-            }
-        });
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
 
-        // Create Falling Petals
-        function createPetals() {
-            const container = document.getElementById('petalsContainer');
-            const petals = ['🌸', '💮', '🏵️', '❤️', '💕'];
-            
-            setInterval(() => {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                petal.innerHTML = petals[Math.floor(Math.random() * petals.length)];
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                petal.style.fontSize = (Math.random() * 15 + 10) + 'px';
-                petal.style.opacity = Math.random() * 0.5 + 0.3;
-                container.appendChild(petal);
-                
-                setTimeout(() => petal.remove(), 10000);
-            }, 500);
-        }
+  window.addEventListener("resize", resize);
+  resize();
 
-        // Ink splash effect on paragraphs
-        document.querySelectorAll('.paragraph').forEach(p => {
-            p.addEventListener('mouseenter', function(e) {
-                for (let i = 0; i < 5; i++) {
-                    const splash = document.createElement('div');
-                    splash.className = 'ink-splash';
-                    splash.style.left = Math.random() * 100 + '%';
-                    splash.style.top = Math.random() * 100 + '%';
-                    splash.style.width = Math.random() * 20 + 5 + 'px';
-                    splash.style.height = splash.style.width;
-                    this.appendChild(splash);
-                    setTimeout(() => splash.remove(), 2000);
-                }
-            });
-        });
+  const particles = [];
+  const count = 60;
 
-        // Initialize
-        initLetter();
-        createPetals();
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 3 + 1,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5
+    });
+  }
 
-        // Easter egg: Konami code for extra love
-        let konamiCode = [];
-        const secretCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-        
-        document.addEventListener('keydown', (e) => {
-            konamiCode.push(e.key);
-            konamiCode = konamiCode.slice(-10);
-            
-            if (konamiCode.join('') === secretCode.join('')) {
-                // Explosion of love!
-                for (let i = 0; i < 100; i++) {
-                    setTimeout(() => {
-                        createFloatingHeart(
-                            Math.random() * window.innerWidth,
-                            window.innerHeight
-                        );
-                    }, i * 30);
-                }
-            }
-        });
-    </script>
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.fill();
+
+      p.x += p.dx;
+      p.y += p.dy;
+
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+
+    requestAnimationFrame(animateParticles);
+  }
+
+  animateParticles();
+</script>
+
 </body>
 </html>
